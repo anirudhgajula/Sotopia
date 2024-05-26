@@ -114,6 +114,8 @@ async def arun_one_episode(
     push_to_db: bool = False,
 ) -> list[tuple[str, str, Message]]:
     agents = Agents({agent.agent_name: agent for agent in agent_list})
+    # environment_messages is a dictionary mapping agent_name to Observation
+    # data type storing last_turn, turn_number, and available_actions
     environment_messages = env.reset(agents=agents, omniscient=omniscient)
     agents_model_names = [model_dict["agent1"], model_dict["agent2"]]
     for agent_name, agent_model in zip(env.agents, agents_model_names):
@@ -302,20 +304,18 @@ async def run_async_server(
                 for model_name in agents_model_dict.values()
             ],
         )
-    print(env_agent_combo[0] for env_agent_combo in env_agent_combo_iter)
-    print(env_agent_combo[1] for env_agent_combo in env_agent_combo_iter)
     episode_futures = [
-        # arun_one_episode(
-        #     env=env_agent_combo[0],
-        #     agent_list=env_agent_combo[1],
-        #     model_dict=model_dict,
-        #     omniscient=omniscient,
-        #     script_like=script_like,
-        #     json_in_script=json_in_script,
-        #     tag=tag,
-        #     push_to_db=push_to_db,
-        # )
-        # for env_agent_combo in env_agent_combo_iter
+        arun_one_episode(
+            env=env_agent_combo[0],
+            agent_list=env_agent_combo[1],
+            model_dict=model_dict,
+            omniscient=omniscient,
+            script_like=script_like,
+            json_in_script=json_in_script,
+            tag=tag,
+            push_to_db=push_to_db,
+        )
+        for env_agent_combo in env_agent_combo_iter
     ]
 
     batch_results = (

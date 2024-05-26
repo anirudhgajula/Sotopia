@@ -701,6 +701,7 @@ def generate_action_speak(
         return AgentAction(action_type="none", argument="")
 
 
+### This is the main prompt to be modified for BDI/CoT
 @gin.configurable
 @beartype
 async def agenerate_action(
