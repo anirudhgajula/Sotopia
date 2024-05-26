@@ -222,11 +222,11 @@ class ScriptOutputParser(BaseOutputParser[ScriptInteractionReturnType]):
 This means you can only generate two lines in one turn.
 
 You can use different types of actions in the [action] part, but PLEASE follows the rule STRICTLY. Remember to include the square brackets when doing an action as stated in the instructions.
-
-You may only do the following:
 1. Use "did nothing" if the agent did nothing.
-2. Use "left the conversation" if the agent left the conversation. And you should stop generation
-
+2. Use "said: "{self.argument}" if the agent want to say, ask or inquire something.
+3. Use "[non-verbal communication] {self.argument}" if the agent did non-verbal communication.
+4. Use "[action] {self.argument}" if the agent did an action.
+5. Use "left the conversation" if the agent left the conversation. And you should stop generation
 Other than that, no other format are allowed.
 
 For example, the following outputs are valid:

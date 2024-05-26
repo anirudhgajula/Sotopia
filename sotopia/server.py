@@ -253,6 +253,8 @@ async def run_async_server(
     else the sampler is not used. Please pass in BaseSampler or simply not specify it when using this option.
     """
 
+    print("TESTING WOOHOO WE ARE MODIFYING IT NOW!!!")
+
     assert not (push_to_db and tag is None), "please provide a tag when push to db"
 
     # Create Environment and agents
