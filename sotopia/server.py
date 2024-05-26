@@ -253,7 +253,7 @@ async def run_async_server(
     else the sampler is not used. Please pass in BaseSampler or simply not specify it when using this option.
     """
 
-    print("TESTING WOOHOO WE ARE MODIFYING IT NOW!!!")
+    print("TESTING 2")
 
     assert not (push_to_db and tag is None), "please provide a tag when push to db"
 
@@ -302,18 +302,20 @@ async def run_async_server(
                 for model_name in agents_model_dict.values()
             ],
         )
+    print(env_agent_combo[0] for env_agent_combo in env_agent_combo_iter)
+    print(env_agent_combo[1] for env_agent_combo in env_agent_combo_iter)
     episode_futures = [
-        arun_one_episode(
-            env=env_agent_combo[0],
-            agent_list=env_agent_combo[1],
-            model_dict=model_dict,
-            omniscient=omniscient,
-            script_like=script_like,
-            json_in_script=json_in_script,
-            tag=tag,
-            push_to_db=push_to_db,
-        )
-        for env_agent_combo in env_agent_combo_iter
+        # arun_one_episode(
+        #     env=env_agent_combo[0],
+        #     agent_list=env_agent_combo[1],
+        #     model_dict=model_dict,
+        #     omniscient=omniscient,
+        #     script_like=script_like,
+        #     json_in_script=json_in_script,
+        #     tag=tag,
+        #     push_to_db=push_to_db,
+        # )
+        # for env_agent_combo in env_agent_combo_iter
     ]
 
     batch_results = (
