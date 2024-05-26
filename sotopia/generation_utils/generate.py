@@ -219,7 +219,7 @@ class ScriptOutputParser(BaseOutputParser[ScriptInteractionReturnType]):
     def get_format_instructions(self) -> str:
         if self.single_turn:
             return r"""For one turn, only write the next step of this agent. You should follow the structure. The format looks like this: Turn #0 \n[participant's name] [action].
-This means you can only generate two lines in one turn.
+This means you can only generate two lines in one turn..
 
 You can use different types of actions in the [action] part, but PLEASE follows the rule STRICTLY. Remember to include the square brackets when doing an action as stated in the instructions.
 1. Use "did nothing" if the agent did nothing.
