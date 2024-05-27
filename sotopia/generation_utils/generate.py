@@ -399,6 +399,26 @@ def remove_BDI_output(
     log.info(f"Reformated output: {reformat}")
     return reformat
 
+def remove_MRO_output(
+    ill_formed_output: str,
+    model_name: str = "gpt-3.5-turbo",
+) -> str:
+    template = """
+    Remove the 5 generated actions from this output, returning only what follows:
+    Original string: {ill_formed_output}
+    """
+    chain = obtain_chain(
+        model_name=model_name,
+        template=template,
+        input_variables=re.findall(r"{(.*?)}", template),
+    )
+    input_values = {
+        "ill_formed_output": ill_formed_output
+    }
+    reformat = chain.predict([logging_handler], **input_values)
+    log.info(f"Reformated output: {reformat}")
+    return reformat
+
 
 @beartype
 def format_bad_output(
@@ -457,6 +477,12 @@ def generate(
     # MODIFIED
     if reasoning == "BDI":
         result = remove_BDI_output(result)
+    elif reasoning == "BDIEX":
+        result = remove_BDI_output(result)
+    elif reasoning == "MRO":
+        result = remove_MRO_output(result)
+    elif reasoning == "MROEX":
+        result = remove_MRO_output(result)
     # END MODIFIED
 
     try:
@@ -512,6 +538,12 @@ async def agenerate(
     # MODIFIED
     if reasoning == "BDI":
         result = remove_BDI_output(result)
+    elif reasoning == "BDIEX":
+        result = remove_BDI_output(result)
+    elif reasoning == "MRO":
+        result = remove_MRO_output(result)
+    elif reasoning == "MROEX":
+        result = remove_MRO_output(result)
     # END MODIFIED
 
     # print("Removed: " + result)
@@ -814,41 +846,7 @@ async def agenerate_action(
 
                 [A JSON object following the above output schema]
                 """
-            elif reasoning_strategy == "COT":
-                template = """
-                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
-                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
-                Note that {agent}'s goal is only visible to you.
-                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
-                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
-                {history}.
-                You are at Turn #{turn_number}. Your available action types are
-                {action_list}.
-                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
-                
-                First, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
-
-                Beliefs: [one sentence]
-                Desires: [one sentence]
-                Intentions: [one sentence]
-
-                Finally, use your intentions to choose an action for {agent}.
-                Generate a JSON string including the action type and the argument.
-                Your action should follow the given format:
-                {format_instructions}
-
-                The final output should strictly follow the following format:
-                [A JSON object following the above output schema]
-                
-                For example, consider this example situation:
-
-                Raaghav Malik is a software engineer who has noticed his project team is feeling overwhelmed due to tight deadlines and a heavy workload. He wants to ensure the team remains motivated and productive while also meeting project goals.
-                
-                Your Response:
-                Action: Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity.
-                But the above action must be in this format: {format_instructions}
-                """
-            elif reasoning_strategy == "BDIC":
+            elif reasoning_strategy == "BDIEX":
                 template = """
                 Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
                 You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
@@ -879,17 +877,117 @@ async def agenerate_action(
                 [A JSON object following the above output schema]
                 
                 For example, consider this example situation:
+                
+                Scenario: Someone must address team member's workload and motivation
+                Participants: Raaghav Malik and Anirudh Gajula
+                Raaghav Malik's background: Raaghav Malik is a software engineer with a focus on project management and team dynamics. he/him pronouns.
+                Personality and values description: Raaghav values teamwork, efficiency, and maintaining a positive work environment. He is empathetic and proactive in addressing team concerns.
+                Raaghav's secrets: Raaghav sometimes doubts his own ability to manage team stress effectively.
+                Anirudh Gajula's background: Anirudh Gajula is a highly skilled software engineer with a background in machine learning and quantitative analysis. he/him pronouns.
+                Raaghav Malik's goal: Ensure Anirudh remains motivated and productive, and that project goals are met.
+                Anirudh's goal: Successfully complete the project while managing his workload and maintaining a healthy work-life balance.
 
-                Raaghav Malik is a software engineer who has noticed his project team is feeling overwhelmed due to tight deadlines and a heavy workload. He wants to ensure the team remains motivated and productive while also meeting project goals.
+                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You to ensure the team remains motivated and productive while also meeting project goals.
                 
                 Your Response:
-                Beliefs: Raaghav believes that his team is feeling stressed and overwhelmed due to the current workload and deadlines.
-                Desires: Raaghav desires to improve his team's morale and ensure they are motivated and productive.
+                Beliefs: Raaghav believes that Anirudh is feeling stressed and overwhelmed due to the current workload and deadlines.
+                Desires: Raaghav desires to improve Anirudh's morale and ensure they are motivated and productive.
                 Intentions: Raaghav intends to implement strategies to reduce stress and improve the team's work environment.
                 
-                Action: Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity.
-                But the above action must be in this format: {format_instructions}
+                {"action_type": "action", "argument": "Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity."}
                 """
+            elif reasoning_strategy == "MRO":
+                template="""
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+                
+                First, come up with 5 different actions given the scenario. Please only write one sentence for each. Use the following template:
+
+                Action 1: [one sentence]
+                Action 2: [one sentence]
+                Action 3: [one sentence]
+                Action 4: [one sentence]
+                Action 5: [one sentence]
+
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                Action 1: [one sentence]
+                Action 2: [one sentence]
+                Action 3: [one sentence]
+                Action 4: [one sentence]
+                Action 5: [one sentence]
+
+                [A JSON object following the above output schema]
+                """
+            
+            elif reasoning_strategy == "MROEX":
+                template = """
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+                
+                First, come up with 5 different actions given the scenario. Please only write one sentence for each. Use the following template:
+
+                Action 1: [one sentence]
+                Action 2: [one sentence]
+                Action 3: [one sentence]
+                Action 4: [one sentence]
+                Action 5: [one sentence]
+
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background, personality and secrets. You do not have to provide any justification for your choice.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output must strictly follow the following format:
+                Action 1: [one sentence]
+                Action 2: [one sentence]
+                Action 3: [one sentence]
+                Action 4: [one sentence]
+                Action 5: [one sentence]
+
+                [A JSON object following the above output schema]
+                
+                For example, consider this example situation:
+                
+                Scenario: Someone must address team member's workload and motivation
+                Participants: Raaghav Malik and Anirudh Gajula
+                Raaghav Malik's background: Raaghav Malik is a software engineer with a focus on project management and team dynamics. he/him pronouns.
+                Personality and values description: Raaghav values teamwork, efficiency, and maintaining a positive work environment. He is empathetic and proactive in addressing team concerns.
+                Raaghav's secrets: Raaghav sometimes doubts his own ability to manage team stress effectively.
+                Anirudh Gajula's background: Anirudh Gajula is a highly skilled software engineer with a background in machine learning and quantitative analysis. he/him pronouns.
+                Raaghav Malik's goal: Ensure Anirudh remains motivated and productive, and that project goals are met.
+                Anirudh's goal: Successfully complete the project while managing his workload and maintaining a healthy work-life balance.
+
+                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You to ensure the team remains motivated and productive while also meeting project goals.
+                
+                Your Response:
+                Action 1: Anirudh, how can I support you better with your workload?
+                Action 2: Let's redistribute tasks to ease your burden, Anirudh.
+                Action 3: How about regular check-ins to address workload challenges, Anirudh?
+                Action 4: Let's brainstorm ways to work smarter, Anirudh.
+                Action 5: I've arranged extra resources to help you, Anirudh.
+
+                {"action_type": "speak", "argument": "Let's redistribute tasks to ease your burden, Anirudh."}
+                """
+            
             else:
                 template = """
                 Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
