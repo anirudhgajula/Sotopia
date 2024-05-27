@@ -378,6 +378,29 @@ def format_bad_output_for_script(
 
 
 @beartype
+def remove_BDI_output(
+    ill_formed_output: str,
+    model_name: str = "gpt-3.5-turbo",
+) -> str:
+    template = """
+    Remove beliefs, desires, and intentions from this output, returning only what follows:
+
+    Original string: {ill_formed_output}
+    """
+    chain = obtain_chain(
+        model_name=model_name,
+        template=template,
+        input_variables=re.findall(r"{(.*?)}", template),
+    )
+    input_values = {
+        "ill_formed_output": ill_formed_output
+    }
+    reformat = chain.predict([logging_handler], **input_values)
+    log.info(f"Reformated output: {reformat}")
+    return reformat
+
+
+@beartype
 def format_bad_output(
     ill_formed_output: str,
     format_instructions: str,
@@ -412,6 +435,7 @@ def generate(
     input_values: dict[str, str],
     output_parser: BaseOutputParser[OutputType],
     temperature: float = 0.7,
+    reasoning: str = ""
 ) -> OutputType:
     input_variables = re.findall(r"{(.*?)}", template)
     assert (
@@ -429,6 +453,12 @@ def generate(
     if "format_instructions" not in input_values:
         input_values["format_instructions"] = output_parser.get_format_instructions()
     result = chain.predict([logging_handler], **input_values)
+
+    # MODIFIED
+    if reasoning == "BDI":
+        result = remove_BDI_output(result)
+    # END MODIFIED
+
     try:
         parsed_result = output_parser.parse(result)
     except KeyboardInterrupt:
@@ -454,6 +484,7 @@ async def agenerate(
     input_values: dict[str, str],
     output_parser: BaseOutputParser[OutputType],
     temperature: float = 0.7,
+    reasoning: str = ""
 ) -> tuple[OutputType, str]:
     input_variables = re.findall(r"{(.*?)}", template)
     assert (
@@ -472,12 +503,17 @@ async def agenerate(
         input_values["format_instructions"] = output_parser.get_format_instructions()
     result = await chain.apredict([logging_handler], **input_values)
 
-
     print(result)
 
-
-
     prompt = logging_handler.retrive_prompt()
+
+    # MODIFIED
+    if reasoning == "BDI":
+        result = remove_BDI_output(result)
+    # END MODIFIED
+
+    print("Removed: " + result)
+
     try:
         parsed_result = output_parser.parse(result)
     except Exception as e:
@@ -802,7 +838,8 @@ async def agenerate_action(
                 action_list=" ".join(action_types),
             ),
             output_parser=PydanticOutputParser(pydantic_object=AgentAction),
-            temperature=temperature
+            temperature=temperature,
+            reasoning=reasoning_strategy
         )
     except Exception:
         return AgentAction(action_type="none", argument=""), ""
