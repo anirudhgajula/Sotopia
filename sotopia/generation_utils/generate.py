@@ -473,7 +473,7 @@ async def agenerate(
     print(result)
 
 
-    
+
     prompt = logging_handler.retrive_prompt()
     try:
         parsed_result = output_parser.parse(result)
@@ -755,7 +755,7 @@ async def agenerate_action(
                 {action_list}.
                 Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
 
-                First, please reiterate your current beliefs about the situation. Then, reiterate your desires. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
+                First, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
 
                 Beliefs: [one sentence]
                 Desires: [one sentence]
@@ -781,6 +781,13 @@ async def agenerate_action(
                 Please only generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                [A JSON object following the above output schema]
                 """
         return await agenerate(
             model_name=model_name,
