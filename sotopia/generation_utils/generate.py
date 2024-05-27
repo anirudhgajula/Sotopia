@@ -507,7 +507,7 @@ async def agenerate(
 
     prompt = logging_handler.retrive_prompt()
 
-    print(prompt)
+    # print(prompt)
 
     # MODIFIED
     if reasoning == "BDI":
