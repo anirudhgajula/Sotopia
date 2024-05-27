@@ -41,6 +41,7 @@ LLM_Name = Literal[
     "text-davinci-003",
     "gpt-4",
     "gpt-4-turbo",
+    "gpt-4o",
     "human",
     "redis",
     "mistralai/Mixtral-8x7B-Instruct-v0.1",
@@ -301,6 +302,7 @@ def _return_fixed_model_version(model_name: str) -> str:
         "gpt-3.5-turbo-ft-MF",
         "gpt-4",
         "gpt-4-turbo",
+        "gpt-4o",
     ]:
         return {
             "gpt-3.5-turbo": "gpt-3.5-turbo-0613",
@@ -308,6 +310,7 @@ def _return_fixed_model_version(model_name: str) -> str:
             "gpt-3.5-turbo-ft-MF": "ft:gpt-3.5-turbo-0613:academicscmu::8nuER4bO",
             "gpt-4": "gpt-4-0613",
             "gpt-4-turbo": "gpt-4-1106-preview",
+            "gpt-4o": "gpt-4o-2024-05-13",
         }[model_name]
     else:
         return model_name
