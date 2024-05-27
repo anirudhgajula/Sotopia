@@ -78,7 +78,7 @@ class LLMAgent(BaseAgent[Observation, AgentAction]):
             )
             return action
 
-    async def aact(self, obs: Observation) -> AgentAction:
+    async def aact(self, obs: Observation, reasoning: str) -> AgentAction:
         self.recv_message("Environment", obs)
 
         if len(obs.available_actions) == 1 and "none" in obs.available_actions:
@@ -92,6 +92,7 @@ class LLMAgent(BaseAgent[Observation, AgentAction]):
                 agent=self.agent_name,
                 goal=self.goal,
                 script_like=self.script_like,
+                reasoning_strategy=reasoning
             )
 
             # MODIFIED

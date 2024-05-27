@@ -112,6 +112,7 @@ async def arun_one_episode(
     json_in_script: bool = False,
     tag: str | None = None,
     push_to_db: bool = False,
+    reasoning_strategy: str = ""
 ) -> list[tuple[str, str, Message]]:
     agents = Agents({agent.agent_name: agent for agent in agent_list})
     # environment_messages is a dictionary mapping agent_name to Observation
@@ -156,7 +157,7 @@ async def arun_one_episode(
         agent_messages: dict[str, AgentAction] = dict()
         actions = await asyncio.gather(
             *[
-                agents[agent_name].aact(environment_messages[agent_name])
+                agents[agent_name].aact(environment_messages[agent_name], reasoning_strategy)
                 for agent_name in env.agents
             ]
         )
@@ -242,6 +243,7 @@ async def run_async_server(
     tag: str | None = None,
     push_to_db: bool = False,
     using_async: bool = True,
+    reasoning: str = ""
 ) -> list[list[tuple[str, str, Message]]]:
     """
     Doc incomplete
@@ -314,6 +316,7 @@ async def run_async_server(
             json_in_script=json_in_script,
             tag=tag,
             push_to_db=push_to_db,
+            reasoning_strategy=reasoning
         )
         for env_agent_combo in env_agent_combo_iter
     ]
