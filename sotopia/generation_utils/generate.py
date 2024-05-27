@@ -503,7 +503,7 @@ async def agenerate(
         input_values["format_instructions"] = output_parser.get_format_instructions()
     result = await chain.apredict([logging_handler], **input_values)
 
-    print(result)
+    # print(result)
 
     prompt = logging_handler.retrive_prompt()
 
@@ -512,7 +512,7 @@ async def agenerate(
         result = remove_BDI_output(result)
     # END MODIFIED
 
-    print("Removed: " + result)
+    # print("Removed: " + result)
 
     try:
         parsed_result = output_parser.parse(result)
