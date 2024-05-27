@@ -471,6 +471,12 @@ async def agenerate(
     if "format_instructions" not in input_values:
         input_values["format_instructions"] = output_parser.get_format_instructions()
     result = await chain.apredict([logging_handler], **input_values)
+
+
+    print(result)
+
+
+    
     prompt = logging_handler.retrive_prompt()
     try:
         parsed_result = output_parser.parse(result)
