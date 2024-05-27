@@ -112,7 +112,7 @@ async def arun_one_episode(
     json_in_script: bool = False,
     tag: str | None = None,
     push_to_db: bool = False,
-    reasoning_strategy: str = ""
+    reasoning_strategy: dict[str, str] = {"agent1": "", "agent2": ""}
 ) -> list[tuple[str, str, Message]]:
     agents = Agents({agent.agent_name: agent for agent in agent_list})
     # environment_messages is a dictionary mapping agent_name to Observation
@@ -150,6 +150,8 @@ async def arun_one_episode(
     # set goal for agents
     for index, agent_name in enumerate(env.agents):
         agents[agent_name].goal = env.profile.agent_goals[index]
+        agents[agent_name].reasoning_strat = reasoning_strategy[agent_name]
+    
     rewards: list[list[float]] = []
     reasons: list[str] = []
     while not done:
@@ -157,7 +159,7 @@ async def arun_one_episode(
         agent_messages: dict[str, AgentAction] = dict()
         actions = await asyncio.gather(
             *[
-                agents[agent_name].aact(environment_messages[agent_name], reasoning_strategy)
+                agents[agent_name].aact(environment_messages[agent_name], agents[agent_name].reasoning_strat)
                 for agent_name in env.agents
             ]
         )
@@ -243,7 +245,7 @@ async def run_async_server(
     tag: str | None = None,
     push_to_db: bool = False,
     using_async: bool = True,
-    reasoning: str = ""
+    reasoning: dict[str, str] = {"agent1": "", "agent2": ""}
 ) -> list[list[tuple[str, str, Message]]]:
     """
     Doc incomplete
