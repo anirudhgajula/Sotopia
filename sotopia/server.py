@@ -119,7 +119,8 @@ async def arun_one_episode(
     # data type storing last_turn, turn_number, and available_actions
     environment_messages = env.reset(agents=agents, omniscient=omniscient)
     agents_model_names = [model_dict["agent1"], model_dict["agent2"]]
-    for agent_name, agent_model in zip(env.agents, agents_model_names):
+    agents_reasoning_strats = [reasoning_strategy["agent1"], reasoning_strategy["agent2"]]
+    for agent_name, agent_model, agent_reasoning in zip(env.agents, agents_model_names, agents_reasoning_strats):
         if agent_model == "human":
             agents[agent_name] = HumanAgent(agent_name)
         elif agent_model == "redis":
@@ -133,7 +134,7 @@ async def arun_one_episode(
             )
         else:
             agents[agent_name] = LLMAgent(
-                agent_name, model_name=agent_model, script_like=script_like
+                agent_name, model_name=agent_model, script_like=script_like, reasoning_strat=agent_reasoning
             )
     agents.reset()
 
@@ -150,7 +151,6 @@ async def arun_one_episode(
     # set goal for agents
     for index, agent_name in enumerate(env.agents):
         agents[agent_name].goal = env.profile.agent_goals[index]
-        agents[agent_name].reasoning_strat = reasoning_strategy[agent_name]
     
     rewards: list[list[float]] = []
     reasons: list[str] = []
