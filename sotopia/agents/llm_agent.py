@@ -95,9 +95,7 @@ class LLMAgent(BaseAgent[Observation, AgentAction]):
                 reasoning_strategy=reasoning
             )
 
-            # MODIFIED
-            print(prompt)
-            # END MODIFIED
+            # print(prompt)
 
             # Temporary fix for mixtral-moe model for incorrect generation format
             if "Mixtral-8x7B-Instruct-v0.1" in self.model_name:
