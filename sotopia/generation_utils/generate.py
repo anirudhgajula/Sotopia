@@ -923,7 +923,7 @@ async def agenerate_action(
                 Desires: Raaghav desires to improve Anirudh's morale and ensure they are motivated and productive.
                 Intentions: Raaghav intends to implement strategies to reduce stress and improve Anirudh's work environment.
                 
-                {"action_type": "action", "argument": "Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity."}
+                {"action_type": "speak", "argument": "Let's hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity."}
                 """
             elif reasoning_strategy == "MRO":
                 template="""
