@@ -951,11 +951,11 @@ async def agenerate_action(
                 {format_instructions}
 
                 The final output should strictly follow the following format:
-                Action 1: [one sentence]
-                Action 2: [one sentence]
-                Action 3: [one sentence]
-                Action 4: [one sentence]
-                Action 5: [one sentence]
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
                 [A JSON object following the above output schema]
                 """
@@ -985,12 +985,12 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
-                The final output must strictly follow the following format:
-                Action 1: [one sentence]
-                Action 2: [one sentence]
-                Action 3: [one sentence]
-                Action 4: [one sentence]
-                Action 5: [one sentence]
+                The final output should strictly follow the following format:
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
                 [A JSON object following the above output schema]
                 
