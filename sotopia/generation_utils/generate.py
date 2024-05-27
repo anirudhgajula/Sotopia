@@ -923,7 +923,7 @@ async def agenerate_action(
                 Desires: Raaghav desires to improve Anirudh's morale and ensure they are motivated and productive.
                 Intentions: Raaghav intends to implement strategies to reduce stress and improve Anirudh's work environment.
                 
-                {"action_type": "speak", "argument": "Let's hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity."}
+                {"action_type": "speak", "argument": "Hey Anirudh! Let's hold a team meeting to discuss workload distribution. I'll try to provide additional resources where possible, and I'm thinking of introducing regular short breaks to help reduce stress."}
                 """
             elif reasoning_strategy == "MRO":
                 template="""
@@ -939,13 +939,13 @@ async def agenerate_action(
                 
                 First, come up with 5 different actions given the scenario. Please only write one sentence for each. Use the following template:
 
-                Action 1: [one sentence]
-                Action 2: [one sentence]
-                Action 3: [one sentence]
-                Action 4: [one sentence]
-                Action 5: [one sentence]
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
-                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. You do not have to provide any justification for your choice.
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. Provide a justification for your choice.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
@@ -974,11 +974,11 @@ async def agenerate_action(
                 
                 First, come up with 5 different actions given the scenario. Please only write one sentence for each. Use the following template:
 
-                Action 1: [one sentence]
-                Action 2: [one sentence]
-                Action 3: [one sentence]
-                Action 4: [one sentence]
-                Action 5: [one sentence]
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
                 Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background, personality and secrets. You do not have to provide any justification for your choice.
                 Generate a JSON string including the action type and the argument.
