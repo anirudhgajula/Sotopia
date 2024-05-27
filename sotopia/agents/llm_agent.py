@@ -30,6 +30,7 @@ class LLMAgent(BaseAgent[Observation, AgentAction]):
         agent_profile: AgentProfile | None = None,
         model_name: str = "gpt-3.5-turbo",
         script_like: bool = False,
+        reasoning_strat: str = ""
     ) -> None:
         super().__init__(
             agent_name=agent_name,
@@ -38,6 +39,7 @@ class LLMAgent(BaseAgent[Observation, AgentAction]):
         )
         self.model_name = model_name
         self.script_like = script_like
+        self.reasoning_strat = reasoning_strat
 
     @property
     def goal(self) -> str:
