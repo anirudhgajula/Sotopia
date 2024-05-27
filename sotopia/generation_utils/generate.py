@@ -768,6 +768,13 @@ async def agenerate_action(
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                [A JSON object following the above output schema]
                 """
             else:
                 template = """
@@ -784,13 +791,6 @@ async def agenerate_action(
                 Please only generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
-
-                The final output should strictly follow the following format:
-                Beliefs: [one sentence]
-                Desires: [one sentence]
-                Intentions: [one sentence]
-
-                [A JSON object following the above output schema]
                 """
         return await agenerate(
             model_name=model_name,
