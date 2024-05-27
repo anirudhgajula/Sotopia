@@ -945,7 +945,7 @@ async def agenerate_action(
                 Action 4: [A JSON object following the above output schema]
                 Action 5: [A JSON object following the above output schema]
 
-                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. You do not have to provide any justification for your choice.
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. Provide a justification for your choice.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
