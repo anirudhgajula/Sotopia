@@ -802,7 +802,7 @@ async def agenerate_action(
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                Finally, use your intentions to choose an action for Alice Smith.
+                Finally, use your intentions to choose an action for {agent}.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
@@ -813,6 +813,82 @@ async def agenerate_action(
                 Intentions: [one sentence]
 
                 [A JSON object following the above output schema]
+                """
+            elif reasoning_strategy == "COT":
+                template = """
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+                
+                First, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
+
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                Finally, use your intentions to choose an action for {agent}.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                [A JSON object following the above output schema]
+                
+                For example, consider this example situation:
+
+                Raaghav Malik is a software engineer who has noticed his project team is feeling overwhelmed due to tight deadlines and a heavy workload. He wants to ensure the team remains motivated and productive while also meeting project goals.
+                
+                Your Response:
+                Action: Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity.
+                But the above action must be in this format: {format_instructions}
+                """
+            elif reasoning_strategy == "BDIC":
+                template = """
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+                
+                First, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
+
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                Finally, use your intentions to choose an action for {agent}.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                [A JSON object following the above output schema]
+                
+                For example, consider this example situation:
+
+                Raaghav Malik is a software engineer who has noticed his project team is feeling overwhelmed due to tight deadlines and a heavy workload. He wants to ensure the team remains motivated and productive while also meeting project goals.
+                
+                Your Response:
+                Beliefs: Raaghav believes that his team is feeling stressed and overwhelmed due to the current workload and deadlines.
+                Desires: Raaghav desires to improve his team's morale and ensure they are motivated and productive.
+                Intentions: Raaghav intends to implement strategies to reduce stress and improve the team's work environment.
+                
+                Action: Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity.
+                But the above action must be in this format: {format_instructions}
                 """
             else:
                 template = """
