@@ -404,7 +404,8 @@ def remove_MRO_output(
     model_name: str = "gpt-3.5-turbo",
 ) -> str:
     template = """
-    Remove the 5 generated actions from this output, returning only what follows:
+    Remove the 5 possible actions from this output, returning only the json object:
+    
     Original string: {ill_formed_output}
     """
     chain = obtain_chain(
@@ -887,12 +888,12 @@ async def agenerate_action(
                 Raaghav Malik's goal: Ensure Anirudh remains motivated and productive, and that project goals are met.
                 Anirudh's goal: Successfully complete the project while managing his workload and maintaining a healthy work-life balance.
 
-                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You to ensure the team remains motivated and productive while also meeting project goals.
+                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You want to ensure Anirudh remains motivated and productive while also meeting project goals.
                 
                 Your Response:
                 Beliefs: Raaghav believes that Anirudh is feeling stressed and overwhelmed due to the current workload and deadlines.
                 Desires: Raaghav desires to improve Anirudh's morale and ensure they are motivated and productive.
-                Intentions: Raaghav intends to implement strategies to reduce stress and improve the team's work environment.
+                Intentions: Raaghav intends to implement strategies to reduce stress and improve Anirudh's work environment.
                 
                 {"action_type": "action", "argument": "Raaghav decides to hold a team meeting to discuss workload distribution, provide additional resources where possible, and introduce regular short breaks to help reduce stress and maintain productivity."}
                 """
@@ -916,7 +917,7 @@ async def agenerate_action(
                 Action 4: [one sentence]
                 Action 5: [one sentence]
 
-                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets.
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. You do not have to provide any justification for your choice.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
@@ -976,7 +977,7 @@ async def agenerate_action(
                 Raaghav Malik's goal: Ensure Anirudh remains motivated and productive, and that project goals are met.
                 Anirudh's goal: Successfully complete the project while managing his workload and maintaining a healthy work-life balance.
 
-                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You to ensure the team remains motivated and productive while also meeting project goals.
+                Imagine you are Raaghav Malik and have noticed your team member Anirudh is feeling overwhelmed due to tight deadlines and a heavy workload. You want to ensure Anirudh remains motivated and productive while also meeting project goals.
                 
                 Your Response:
                 Action 1: Anirudh, how can I support you better with your workload?
