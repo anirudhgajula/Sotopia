@@ -383,7 +383,7 @@ def remove_BDI_output(
     model_name: str = "gpt-3.5-turbo",
 ) -> str:
     template = """
-    Remove beliefs, desires, and intentions from this output, returning only what follows:
+    Remove beliefs, desires, and intentions from this output, returning only the last json object:
 
     Original string: {ill_formed_output}
     """
@@ -405,7 +405,7 @@ def remove_MRO_output(
     model_name: str = "gpt-3.5-turbo",
 ) -> str:
     template = """
-    Remove the 5 possible actions from this output, returning only the json object:
+    Remove the 5 possible actions from this output and the justification, returning only the last json object:
     
     Original string: {ill_formed_output}
     """
@@ -428,7 +428,7 @@ def remove_EMP_output(
     model_name: str = "gpt-3.5-turbo",
 ) -> str:
     template = """
-    Remove the beliefs of other agent and predicted goal of other agent from this text, returning only what follows:
+    Remove the beliefs of other agent and predicted goal of other agent from this text, returning only the last json object:
 
     Original string: {ill_formed_output}
     """
@@ -960,6 +960,37 @@ async def agenerate_action(
                 [A JSON object following the above output schema]
                 """
             
+            elif reasoning_strategy == "BDIM":
+                template="""
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+
+                First, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each. Use the following template:
+
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                Finally, use your intentions to choose an action for {agent}.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs: [one sentence]
+                Desires: [one sentence]
+                Intentions: [one sentence]
+
+                [A JSON object following the above output schema]
+                """
+
             elif reasoning_strategy == "MROEX":
                 template = """
                 Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
@@ -1029,7 +1060,8 @@ async def agenerate_action(
                 {action_list}.
                 Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
 
-                First, if there has been previous conversation, predict the beliefs of the other agent at this point in time. Then, predict their goal from what they have said. Please only write one sentence for each. Use the following template:
+                If there is no previous conversation, initiate a conversation with the other agent based on {agent}'s social goal.
+                Otherwise, predict the beliefs of the other agent at this point in time. Then, predict their goal from what they have said. Please only write one sentence for each. Use the following template:
 
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
