@@ -1092,7 +1092,7 @@ async def agenerate_action(
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
 
-                Finally, use the beliefs and goal of the other agent to choose an action for {agent} that accomplishes {agent}'s goal while also respecting and being considerate towards the other agent's goal.
+                Finally, use the beliefs and goal of the other agent to choose an action for {agent} that accomplishes {agent}'s goal while also respecting and being considerate towards the other agent's goal. If the other agent is persistent in their goal, you can choose to concede or leave the conversation.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
@@ -1101,7 +1101,7 @@ async def agenerate_action(
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
 
-                [A JSON object following the above output schema]
+                [A JSON object following the above output schema] or [leave]
                 """
             elif reasoning_strategy == "BDI+EMP":
                 template = """
@@ -1139,7 +1139,7 @@ async def agenerate_action(
                 Desires of {agent}: [one sentence]
                 Intentions of {agent}: [one sentence]
 
-                [A JSON object following the above output schema]
+                [A JSON object following the above output schema] or [leave]
                 """
             else:
                 template = """
