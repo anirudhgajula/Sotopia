@@ -584,11 +584,12 @@ async def agenerate(
         input_values["format_instructions"] = output_parser.get_format_instructions()
     result = await chain.apredict([logging_handler], **input_values)
 
-    # print(result)
 
     prompt = logging_handler.retrive_prompt()
 
     print(prompt)
+
+    print(result)
 
     # MODIFIED
     if reasoning == "BDI":
@@ -898,6 +899,7 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
+                Reminder: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
                 The final output should strictly follow the following format:
                 Beliefs: [one sentence]
                 Desires: [one sentence]
@@ -1107,11 +1109,12 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
+                Reminder: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
                 The final output should strictly follow the following format:
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
 
-                [A JSON object following the above output schema] or [leave]
+                [A JSON object following the above output schema]
                 """
             elif reasoning_strategy == "EMPM":
                 template = """
