@@ -560,7 +560,7 @@ async def agenerate(
 
     prompt = logging_handler.retrive_prompt()
 
-    print(prompt)
+    # print(prompt)
 
     # MODIFIED
     if reasoning == "BDI":
@@ -1074,6 +1074,44 @@ async def agenerate_action(
                 The final output should strictly follow the following format:
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
+
+                [A JSON object following the above output schema]
+                """
+            elif reasoning_strategy == "BDI+EMP":
+                template = """
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+
+                First, if there has been previous conversation, predict the beliefs of the other agent at this point in time. Then, predict their goal from what they have said. Please only write one sentence for each. 
+                After this, please reiterate your current beliefs about the situation. Then, reiterate your desires, which should be based on your social goals. Finally, combine your beliefs and desires to describe your intentions. Please only write one sentence for each.
+
+                Use the following template:
+
+                Beliefs of other agent: [one sentence]
+                Predicted goal of other agent: [one sentence]
+                Beliefs of {agent}: [one sentence]
+                Desires of {agent}: [one sentence]
+                Intentions of {agent}: [one sentence]
+
+                Finally, use your intentions, combined with the beliefs and goal of the other agent, to choose an action for {agent} that accomplishes {agent}'s goal while also respecting and being considerate towards the other agent's goal.
+                
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs of other agent: [one sentence]
+                Predicted goal of other agent: [one sentence]
+                Beliefs of {agent}: [one sentence]
+                Desires of {agent}: [one sentence]
+                Intentions of {agent}: [one sentence]
 
                 [A JSON object following the above output schema]
                 """
