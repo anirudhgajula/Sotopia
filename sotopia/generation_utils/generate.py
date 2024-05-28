@@ -588,7 +588,7 @@ async def agenerate(
 
     prompt = logging_handler.retrive_prompt()
 
-    # print(prompt)
+    print(prompt)
 
     # MODIFIED
     if reasoning == "BDI":
@@ -605,7 +605,7 @@ async def agenerate(
         result = remove_BDI_EMP_output(result)
     # END MODIFIED
 
-    # print("Removed: " + result)
+    print("Removed: " + result)
 
     try:
         parsed_result = output_parser.parse(result)
@@ -1018,7 +1018,6 @@ async def agenerate_action(
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                The final output should strictly follow the following format:
                 Action 1: [A JSON object following the above output schema] or [leave]
                 Action 2: [A JSON object following the above output schema] or [leave]
                 Action 3: [A JSON object following the above output schema] or [leave]
