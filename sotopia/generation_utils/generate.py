@@ -444,6 +444,28 @@ def remove_EMP_output(
     log.info(f"Reformated output: {reformat}")
     return reformat
 
+@beartype
+def remove_BDI_EMP_output(
+    ill_formed_output: str,
+    model_name: str = "gpt-3.5-turbo",
+) -> str:
+    template = """
+    Remove beliefs, desires, intentions and predicted goals from this output, returning only the last json object:
+
+    Original string: {ill_formed_output}
+    """
+    chain = obtain_chain(
+        model_name=model_name,
+        template=template,
+        input_variables=re.findall(r"{(.*?)}", template),
+    )
+    input_values = {
+        "ill_formed_output": ill_formed_output
+    }
+    reformat = chain.predict([logging_handler], **input_values)
+    log.info(f"Reformated output: {reformat}")
+    return reformat
+
 
 @beartype
 def format_bad_output(
@@ -510,6 +532,8 @@ def generate(
         result = remove_MRO_output(result)
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
+    elif reasoning == "BDI+EMP":
+        result = remove_BDI_EMP_output(result)
     # END MODIFIED
 
     try:
@@ -573,6 +597,8 @@ async def agenerate(
         result = remove_MRO_output(result)
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
+    elif reasoning == "BDI+EMP":
+        result = remove_BDI_EMP_output(result)
     # END MODIFIED
 
     # print("Removed: " + result)
