@@ -532,6 +532,10 @@ def generate(
         result = remove_MRO_output(result)
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
+    elif reasoning == "EMPM":
+        result = remove_BDI_EMP_output(result)
+    elif reasoning == "BDIM":
+        result = remove_BDI_EMP_output(result)
     elif reasoning == "BDI+EMP":
         result = remove_BDI_EMP_output(result)
     # END MODIFIED
@@ -1004,17 +1008,24 @@ async def agenerate_action(
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                Finally, use your intentions to choose an action for {agent}.
+                Finally, use your intentions to generate 5 possible actions for {agent}.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
 
-                The final output should strictly follow the following format:
+                As such, your final output should strictly follow the following format:
                 Beliefs: [one sentence]
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                [A JSON object following the above output schema]
+                The final output should strictly follow the following format:
+                Action 1: [A JSON object following the above output schema] or [leave]
+                Action 2: [A JSON object following the above output schema] or [leave]
+                Action 3: [A JSON object following the above output schema] or [leave]
+                Action 4: [A JSON object following the above output schema] or [leave]
+                Action 5: [A JSON object following the above output schema] or [leave]
+
+                [A JSON object following the above output schema] or [leave]
                 """
 
             elif reasoning_strategy == "MROEX":
@@ -1102,6 +1113,42 @@ async def agenerate_action(
                 Predicted goal of other agent: [one sentence]
 
                 [A JSON object following the above output schema]
+                """
+            elif reasoning_strategy == "EMPM":
+                template = """
+                Imagine you are {agent}, your task is to act/speak as {agent} would, keeping in mind {agent}'s social goal.
+                You can find {agent}'s goal (or background) in the 'Here is the context of the interaction' field.
+                Note that {agent}'s goal is only visible to you.
+                You should try your best to achieve {agent}'s goal in a way that align with their character traits.
+                Additionally, maintaining the conversation's naturalness and realism is essential (e.g., do not repeat what other people has already said before).
+                {history}.
+                You are at Turn #{turn_number}. Your available action types are
+                {action_list}.
+                Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+
+                If there is no previous conversation, initiate a conversation with the other agent based on {agent}'s social goal.
+                Otherwise, predict the beliefs of the other agent at this point in time. Then, predict their goal from what they have said. Please only write one sentence for each. Use the following template:
+
+                Beliefs of other agent: [one sentence]
+                Predicted goal of other agent: [one sentence]
+
+                Finally, use the beliefs and goal of the other agent generate 5 possible actions for {agent} that accomplishes {agent}'s goal while also respecting and being considerate towards the other agent's goal.
+                Generate a JSON string including the action type and the argument.
+                Your action should follow the given format:
+                {format_instructions}
+
+                The final output should strictly follow the following format:
+                Beliefs of other agent: [one sentence]
+                Predicted goal of other agent: [one sentence]
+
+                Action 1: [A JSON object following the above output schema] or [leave]
+                Action 2: [A JSON object following the above output schema] or [leave]
+                Action 3: [A JSON object following the above output schema] or [leave]
+                Action 4: [A JSON object following the above output schema] or [leave]
+                Action 5: [A JSON object following the above output schema] or [leave]
+
+                [A JSON object following the above output schema] or [leave]
+
                 """
             elif reasoning_strategy == "BDI+EMP":
                 template = """
