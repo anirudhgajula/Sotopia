@@ -937,7 +937,7 @@ async def agenerate_action(
                 {action_list}.
                 Note: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
                 
-                First, come up with 5 different actions given the scenario. Please only write one sentence for each. Use the following template:
+                First, come up with 5 different actions given the scenario. One of these actions may be choosing to leave. Please only write one sentence for each. Use the following template:
 
                 Action 1: [A JSON object following the above output schema]
                 Action 2: [A JSON object following the above output schema]
@@ -945,7 +945,7 @@ async def agenerate_action(
                 Action 4: [A JSON object following the above output schema]
                 Action 5: [A JSON object following the above output schema]
 
-                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. Provide a justification for your choice.
+                Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. You may choose to leave. Provide a justification for your choice.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
