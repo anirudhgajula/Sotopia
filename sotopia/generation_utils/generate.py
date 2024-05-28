@@ -939,11 +939,11 @@ async def agenerate_action(
                 
                 First, come up with 5 different actions given the scenario. One of these actions may be choosing to leave. Please only write one sentence for each. Use the following template:
 
-                Action 1: [A JSON object following the above output schema]
-                Action 2: [A JSON object following the above output schema]
-                Action 3: [A JSON object following the above output schema]
-                Action 4: [A JSON object following the above output schema]
-                Action 5: [A JSON object following the above output schema]
+                Action 1: [A JSON object following the above output schema] or [leave]
+                Action 2: [A JSON object following the above output schema] or [leave]
+                Action 3: [A JSON object following the above output schema] or [leave]
+                Action 4: [A JSON object following the above output schema] or [leave]
+                Action 5: [A JSON object following the above output schema] or [leave]
 
                 Finally, based on {agent}'s goal, choose the optimal action that aligns with their character traits, in light of their background and secrets. You may choose to leave. Provide a justification for your choice.
                 Generate a JSON string including the action type and the argument.
@@ -951,13 +951,13 @@ async def agenerate_action(
                 {format_instructions}
 
                 The final output should strictly follow the following format:
-                Action 1: [A JSON object following the above output schema]
-                Action 2: [A JSON object following the above output schema]
-                Action 3: [A JSON object following the above output schema]
-                Action 4: [A JSON object following the above output schema]
-                Action 5: [A JSON object following the above output schema]
+                Action 1: [A JSON object following the above output schema] or [leave]
+                Action 2: [A JSON object following the above output schema] or [leave]
+                Action 3: [A JSON object following the above output schema] or [leave]
+                Action 4: [A JSON object following the above output schema] or [leave]
+                Action 5: [A JSON object following the above output schema] or [leave]
 
-                [A JSON object following the above output schema]
+                [A JSON object following the above output schema] or [leave]
                 """
             
             elif reasoning_strategy == "BDIM":
