@@ -1181,6 +1181,7 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
+                Reminder: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
                 The final output should strictly follow the following format:
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
@@ -1188,7 +1189,7 @@ async def agenerate_action(
                 Desires of {agent}: [one sentence]
                 Intentions of {agent}: [one sentence]
 
-                [A JSON object following the above output schema] or [leave]
+                [A JSON object following the above output schema]
                 """
             else:
                 template = """
