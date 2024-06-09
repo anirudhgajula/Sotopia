@@ -1059,7 +1059,7 @@ async def agenerate_action(
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                Finally, use your intentions to generate 5 possible actions for {agent}.
+                Finally, use your intentions to generate 5 possible actions for {agent}. Then, choose an optimal action that best aligns with your beliefs and desires.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
@@ -1186,6 +1186,7 @@ async def agenerate_action(
                 Predicted goal of other agent: [one sentence]
 
                 Finally, use the beliefs and goal of the other agent generate 5 possible actions for {agent} that accomplishes {agent}'s goal while also respecting and being considerate towards the other agent's goal.
+                Lastly, choose an optimal action that best accomplishes {agent}'s goal while respecting the other agent's goal.
                 Generate a JSON string including the action type and the argument.
                 Your action should follow the given format:
                 {format_instructions}
