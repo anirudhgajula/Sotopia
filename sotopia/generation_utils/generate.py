@@ -421,6 +421,50 @@ def remove_MRO_output(
     log.info(f"Reformated output: {reformat}")
     return reformat
 
+@beartype
+def remove_BDIM_output(
+    ill_formed_output: str,
+    model_name: str = "gpt-3.5-turbo",
+) -> str:
+    template = """
+    Remove the beliefs, desires, intentions, the 5 possible actions from this output and the justification text, returning only what follows after "Optimal Action:":
+    
+    Original string: {ill_formed_output}
+    """
+    chain = obtain_chain(
+        model_name=model_name,
+        template=template,
+        input_variables=re.findall(r"{(.*?)}", template),
+    )
+    input_values = {
+        "ill_formed_output": ill_formed_output
+    }
+    reformat = chain.predict([logging_handler], **input_values)
+    log.info(f"Reformated output: {reformat}")
+    return reformat
+
+@beartype
+def remove_EMPM_output(
+    ill_formed_output: str,
+    model_name: str = "gpt-3.5-turbo",
+) -> str:
+    template = """
+    Remove the beliefs of other agent and predicted goal of other agent from this text, in addition to the 5 possible actions from this output and the justification text, returning only what follows after "Optimal Action:":
+    
+    Original string: {ill_formed_output}
+    """
+    chain = obtain_chain(
+        model_name=model_name,
+        template=template,
+        input_variables=re.findall(r"{(.*?)}", template),
+    )
+    input_values = {
+        "ill_formed_output": ill_formed_output
+    }
+    reformat = chain.predict([logging_handler], **input_values)
+    log.info(f"Reformated output: {reformat}")
+    return reformat
+
 
 @beartype
 def remove_EMP_output(
@@ -533,9 +577,9 @@ def generate(
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
     elif reasoning == "EMPM":
-        result = remove_BDI_EMP_output(result)
+        result = remove_EMPM_output(result)
     elif reasoning == "BDIM":
-        result = remove_BDI_EMP_output(result)
+        result = remove_BDIM_output(result)
     elif reasoning == "BDI+EMP":
         result = remove_BDI_EMP_output(result)
     # END MODIFIED
@@ -591,7 +635,7 @@ async def agenerate(
 
     print(result)
 
-    # MODIFIED
+     # MODIFIED
     if reasoning == "BDI":
         result = remove_BDI_output(result)
     elif reasoning == "BDIEX":
@@ -603,9 +647,9 @@ async def agenerate(
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
     elif reasoning == "EMPM":
-        result = remove_BDI_EMP_output(result)
+        result = remove_EMPM_output(result)
     elif reasoning == "BDIM":
-        result = remove_BDI_EMP_output(result)
+        result = remove_BDIM_output(result)
     elif reasoning == "BDI+EMP":
         result = remove_BDI_EMP_output(result)
     # END MODIFIED
@@ -1020,18 +1064,20 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
-                As such, your final output should strictly follow the following format:
+                Reminder: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+
+                Your final output should strictly follow the following format:
                 Beliefs: [one sentence]
                 Desires: [one sentence]
                 Intentions: [one sentence]
 
-                Action 1: [A JSON object following the above output schema] or [leave]
-                Action 2: [A JSON object following the above output schema] or [leave]
-                Action 3: [A JSON object following the above output schema] or [leave]
-                Action 4: [A JSON object following the above output schema] or [leave]
-                Action 5: [A JSON object following the above output schema] or [leave]
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
-                [A JSON object following the above output schema] or [leave]
+                Optimal Action: [A JSON object following the above output schema]
                 """
 
             elif reasoning_strategy == "MROEX":
@@ -1144,17 +1190,19 @@ async def agenerate_action(
                 Your action should follow the given format:
                 {format_instructions}
 
+                Reminder: You can "leave" this conversation if 1. you have achieved your social goals, 2. this conversation makes you uncomfortable, 3. you find it uninteresting/you lose your patience, 4. or for other reasons you want to leave.
+
                 The final output should strictly follow the following format:
                 Beliefs of other agent: [one sentence]
                 Predicted goal of other agent: [one sentence]
 
-                Action 1: [A JSON object following the above output schema] or [leave]
-                Action 2: [A JSON object following the above output schema] or [leave]
-                Action 3: [A JSON object following the above output schema] or [leave]
-                Action 4: [A JSON object following the above output schema] or [leave]
-                Action 5: [A JSON object following the above output schema] or [leave]
+                Action 1: [A JSON object following the above output schema]
+                Action 2: [A JSON object following the above output schema]
+                Action 3: [A JSON object following the above output schema]
+                Action 4: [A JSON object following the above output schema]
+                Action 5: [A JSON object following the above output schema]
 
-                [A JSON object following the above output schema] or [leave]
+                Optimal Action: [A JSON object following the above output schema]
 
                 """
             elif reasoning_strategy == "BDI+EMP":
