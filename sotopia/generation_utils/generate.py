@@ -405,7 +405,7 @@ def remove_MRO_output(
     model_name: str = "gpt-3.5-turbo",
 ) -> str:
     template = """
-    Remove the 5 possible actions from this output and the justification, returning only the last json object:
+    Remove the 5 possible actions from this output and the justification text, returning only what follows after "Optimal Action:":
     
     Original string: {ill_formed_output}
     """
@@ -602,6 +602,10 @@ async def agenerate(
         result = remove_MRO_output(result)
     elif reasoning == "EMP":
         result = remove_EMP_output(result)
+    elif reasoning == "EMPM":
+        result = remove_BDI_EMP_output(result)
+    elif reasoning == "BDIM":
+        result = remove_BDI_EMP_output(result)
     elif reasoning == "BDI+EMP":
         result = remove_BDI_EMP_output(result)
     # END MODIFIED
@@ -990,7 +994,7 @@ async def agenerate_action(
                 Action 4: [A JSON object following the above output schema]
                 Action 5: [A JSON object following the above output schema]
 
-                [A JSON object following the above output schema]
+                Optimal Action: [A JSON object following the above output schema]
                 """
             
             elif reasoning_strategy == "BDIM":
