@@ -154,10 +154,11 @@ def _iterate_env_agent_combo_not_in_db(
             agent_profiles = [AgentProfile.get(id) for id in agent_ids]
 
             agents = [
-                LLMAgent(agent_profile=agent_profile, model_name=agent_model)
-                for agent_profile, agent_model in zip(
+                LLMAgent(agent_profile=agent_profile, model_name=agent_model, reasoning_strat=agent_reasoning)
+                for agent_profile, agent_model, agent_reasoning in zip(
                     agent_profiles,
                     [model_names["agent1"], model_names["agent2"]],
+                    [reasoning_strats["agent1"], reasoning_strats["agent2"]]
                 )
             ]
 
@@ -209,7 +210,8 @@ def run_async_server_in_batch(
                     run_async_server(
                         model_dict=model_names,
                         sampler=BaseSampler[Observation, AgentAction](),
-                        env_agent_combo_list=env_agent_combo_batch,
+                        reasoning=reasoning_strats,
+                        env_agent_combo_list=env_agent_combo_batch
                     )
                 )
                 env_agent_combo_batch = []
@@ -223,7 +225,8 @@ def run_async_server_in_batch(
                     run_async_server(
                         model_dict=model_names,
                         sampler=BaseSampler[Observation, AgentAction](),
-                        env_agent_combo_list=env_agent_combo_batch,
+                        reasoning=reasoning_strats,
+                        env_agent_combo_list=env_agent_combo_batch
                     )
                 )
             return
