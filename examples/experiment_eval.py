@@ -179,6 +179,8 @@ def run_async_server_in_batch(
         rich_handler = logger.handlers[0]
         logger.removeHandler(rich_handler)
 
+    print("MODIFIED")
+
     # we cannot get the exact length of the generator, we just give an estimate of the length
     env_agent_combo_iter = _iterate_env_agent_combo_not_in_db(model_names=model_names)
     env_agent_combo_iter_length = sum(1 for _ in env_agent_combo_iter)
