@@ -72,6 +72,7 @@ def check_existing_episodes(
     env_id: str,
     agent_ids: list[str],
     models: dict[str, LLM_Name],
+    reasoning: dict[str, str],
     tag: str | None = None,
 ) -> bool:
     if tag:
@@ -83,7 +84,7 @@ def check_existing_episodes(
     if existing_episode:
         for episode in existing_episode:
             assert isinstance(episode, EpisodeLog), "episode should be an EpisodeLog"
-            if episode.agents == agent_ids and episode.models == list(models.values()):
+            if episode.agents == agent_ids and episode.models == list(models.values()) and episode.reasoning_strats == list(reasoning.values()):
                 return True
         return False
     else:
