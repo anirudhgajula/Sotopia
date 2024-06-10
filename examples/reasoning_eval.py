@@ -117,6 +117,7 @@ def _iterate_env_agent_combo_not_in_db(
             EnvAgentComboStorage.find(EnvAgentComboStorage.env_id == env_id).all()
         )
         if not env_agent_combo_storage_list:
+            print("EnvAgentCombo not found")
             _sample_env_agent_combo_and_push_to_db(env_id)
             env_agent_combo_storage_list = list(
                 EnvAgentComboStorage.find(EnvAgentComboStorage.env_id == env_id).all()
