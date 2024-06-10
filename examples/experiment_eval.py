@@ -5,6 +5,8 @@ import subprocess
 from datetime import datetime
 from logging import FileHandler
 from typing import Any, Generator, cast
+import sys
+sys.path.insert(1, "/content/Sotopia/")
 
 import gin
 from absl import flags
