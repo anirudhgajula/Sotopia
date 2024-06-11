@@ -191,6 +191,8 @@ def run_async_server_in_batch(
     env_agent_combo_iter = _iterate_env_agent_combo_not_in_db(model_names=model_names, reasoning_strats=reasoning_strats)
     env_agent_combo_iter_length = sum(1 for _ in env_agent_combo_iter)
 
+    logging.info(f"Env_agent_combo_length: {env_agent_combo_iter_length}")
+
     env_agent_combo_iter = _iterate_env_agent_combo_not_in_db(model_names=model_names, reasoning_strats=reasoning_strats)
     env_agent_combo_batch: list[EnvAgentCombo[Observation, AgentAction]] = []
 
