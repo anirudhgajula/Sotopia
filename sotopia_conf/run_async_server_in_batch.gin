@@ -4,16 +4,20 @@ import __main__ as main_script
 BATCH_SIZE=10
 AGENT1_MODEL="gpt-3.5-turbo"
 AGENT2_MODEL="gpt-3.5-turbo"
+AGENT1_REASONING=""
+AGENT2_REASONING=""
 VERBOSE=False
 TAG_TO_CHECK_EXISTING_EPISODES=None
 
 MODEL_NAMES={"env": "gpt-4", "agent1": %AGENT1_MODEL, "agent2": %AGENT2_MODEL}
+REASONING={"agent1": %AGENT1_REASONING, "agent2": %AGENT2_REASONING}
 ENV_IDS=%gin.REQUIRED
 
 
 main_script.run_async_server_in_batch:
     batch_size=%BATCH_SIZE
     model_names=%MODEL_NAMES
+    reasoning_strats=%REASONING
     verbose=%VERBOSE
     tag=%TAG
 
