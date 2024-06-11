@@ -134,6 +134,8 @@ def _iterate_env_agent_combo_not_in_db(
                 )
                 continue
             first_env_agent_combo_storage_to_run = env_agent_combo_storage
+            if first_env_agent_combo_storage_to_run:
+                logging.info("Valid first_env_agent_combo_storage_to_run")
             break
         if first_env_agent_combo_storage_to_run:
             env_profile = EnvironmentProfile.get(env_id)
