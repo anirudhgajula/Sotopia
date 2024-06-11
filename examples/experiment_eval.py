@@ -128,11 +128,11 @@ def _iterate_env_agent_combo_not_in_db(
                 EnvAgentComboStorage, env_agent_combo_storage
             )
             agent_ids = env_agent_combo_storage.agent_ids
-            if check_existing_episodes(env_id, agent_ids, model_names, tag):
-                logging.info(
-                    f"Episode for {env_id} with agents {agent_ids} using {list(model_names.values())} already exists"
-                )
-                continue
+            # if check_existing_episodes(env_id, agent_ids, model_names, tag):
+            #    logging.info(
+            #        f"Episode for {env_id} with agents {agent_ids} using {list(model_names.values())} already exists"
+            #    )
+            #    continue
             first_env_agent_combo_storage_to_run = env_agent_combo_storage
             break
         if first_env_agent_combo_storage_to_run:
@@ -178,8 +178,6 @@ def run_async_server_in_batch(
         logger.setLevel(logging.CRITICAL)
         rich_handler = logger.handlers[0]
         logger.removeHandler(rich_handler)
-
-    print("MODIFIED")
 
     # we cannot get the exact length of the generator, we just give an estimate of the length
     env_agent_combo_iter = _iterate_env_agent_combo_not_in_db(model_names=model_names)
