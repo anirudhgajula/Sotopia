@@ -128,11 +128,11 @@ def _iterate_env_agent_combo_not_in_db(
                 EnvAgentComboStorage, env_agent_combo_storage
             )
             agent_ids = env_agent_combo_storage.agent_ids
-            # if check_existing_episodes(env_id, agent_ids, model_names, tag):
-            #    logging.info(
-            #        f"Episode for {env_id} with agents {agent_ids} using {list(model_names.values())} already exists"
-            #    )
-            #    continue
+            if check_existing_episodes(env_id, agent_ids, model_names, tag):
+                logging.info(
+                    f"Episode for {env_id} with agents {agent_ids} using {list(model_names.values())} already exists"
+                )
+                continue
             first_env_agent_combo_storage_to_run = env_agent_combo_storage
             break
         if first_env_agent_combo_storage_to_run:
