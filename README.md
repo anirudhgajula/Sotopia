@@ -22,7 +22,7 @@ As a final project for Caltech CS 159, we modified the Sotopia environment to im
 
 ## Usage
 
-# Reasoning Demo
+### Reasoning Demo
 After loading environment and character data to the REDIS server, you can run a simple demo with reasoning using the below. Note that reasoning strategy can be passed into the `reasoning` parameter, which is a dictionary holding reasoning strategy for each agent. The reasoning options are `"BDI"`, `"EMP"`, `"MRO"`, `"BDIM"`, `"EMPM"`, `"BDI+EMP"`, and `"BDI+EMPM"`.
 
 ```python
@@ -45,7 +45,7 @@ await run_async_server(
     )
 ```
 
-# Running Experiments
+### Running Experiments
 We also add support for running experiments in batch using various reasoning strategies, by adding the `reasoning_eval.py` script under `Sotopia/examples`. For example, to run 30 episode simulations with Agent 1 using BDI reasoning (and Agent 2 using no reasoning by default), run the following:
 
 ```bash
