@@ -1,6 +1,4 @@
 # Sotopia (with Reasoning)
-[![Original Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://www.sotopia.world/projects/sotopia)
-[![Original Paper PDF](https://img.shields.io/badge/Paper-PDF-red.svg)](https://arxiv.org/abs/2310.11667)
 <a href="https://www.sotopia.world/projects/sotopia">Original Sotopia Project Page</a>
 <a href="https://arxiv.org/abs/2310.11667">Original Sotopia Paper PDF</a>
 
