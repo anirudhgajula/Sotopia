@@ -10,7 +10,7 @@ As a final project for Caltech CS 159, we modified the Sotopia environment to im
 ## Usage
 
 ### Reasoning Demo
-After loading environment and character data to the REDIS server, you can run a simple demo with reasoning using the below. Note that reasoning strategy can be passed into the `reasoning` parameter, which is a dictionary holding reasoning strategy for each agent. The reasoning options are `"BDI"`, `"EMP"`, `"MRO"`, `"BDIM"`, `"EMPM"`, `"BDI+EMP"`, and `"BDI+EMPM"`.
+After loading environment and character data to the Redis server, you can run a simple demo with reasoning using the below. Note that reasoning strategy can be passed into the `reasoning` parameter, which is a dictionary holding reasoning strategy for each agent. The reasoning options are `"BDI"`, `"EMP"`, `"MRO"`, `"BDIM"`, `"EMPM"`, `"BDI+EMP"`, and `"BDI+EMPM"`.
 
 ```python
 from sotopia.samplers.base_sampler import BaseSampler
