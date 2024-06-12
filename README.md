@@ -2,7 +2,7 @@
   <img src="figs/title.png" style="width: 100%;" alt="sotopia"></img>
 </div>
 
-# Sotopia: an Open-ended Social Learning Environment
+# Sotopia (with Reasoning): an Open-ended Social Learning Environment
 [![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://www.sotopia.world/projects/sotopia)
 [![Paper PDF](https://img.shields.io/badge/Paper-PDF-red.svg)](https://arxiv.org/abs/2310.11667)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3109/)
