@@ -1,4 +1,4 @@
-# Sotopia (with Reasoning)
+# Enhancing Sotopia with Reasoning Strategies
 <a href="https://www.sotopia.world/projects/sotopia">Original Sotopia Project Page</a>
 <a href="https://arxiv.org/abs/2310.11667">Original Sotopia Paper PDF</a>
 
